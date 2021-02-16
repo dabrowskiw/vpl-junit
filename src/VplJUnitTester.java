@@ -266,7 +266,6 @@ public class VplJUnitTester extends org.junit.runner.notification.RunListener
 
     /**
      * Searches Classes which look like testclasses in the directory
-     * @param string
      * @return
      */
     public static List<String> findTestClasses()

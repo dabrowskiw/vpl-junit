@@ -27,7 +27,7 @@ public class StyleViolation
 
     /**
      * Stlye violations are built from the output of the checkstyle log
-     * @param log
+     * @param logline
      */
     public static StyleViolation build(String logline)
     {

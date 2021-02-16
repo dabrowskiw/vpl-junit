@@ -202,7 +202,7 @@ public class VplConsoleSimulator
 	 * Skips input till the String is found. This string is consumed - so anything after this string can
 	 * be consumed with getOutput. If the String is not found then it reads up all remaining lines.
 	 * 
-	 * @param string
+	 * @param condition
 	 * @throws IOException 
 	 */
 	public void skipOutputTill(Predicate<String> condition) throws IOException
@@ -221,7 +221,7 @@ public class VplConsoleSimulator
 	/**
 	 * Fetches the full content and asserts the Strings to be containing in the output. 
 	 * Auto generates an error message containing the fullConsoleIO and the expected content
-	 * @param string the content
+	 * @param content the content
 	 * @throws IOException 
 	 */
 	public void assertOutputContains(String ... content) throws IOException
@@ -261,7 +261,7 @@ public class VplConsoleSimulator
 	/**
 	 * Fetches the full content and asserts the Strings to be containing in the output. 
 	 * Auto generates an error message containing the fullConsoleIO and the expected content
-	 * @param string the content
+	 * @param expectedValue the content
 	 * @throws IOException 
 	 */
 	public void assertOutput(String expectedValue) throws IOException
@@ -271,7 +271,8 @@ public class VplConsoleSimulator
 	
 	/**
 	 * Fetches the full output and asserts the String to be at the end of the output.
-	 * @param string
+	 * @param generateErrorMessage
+	 * @param expectedValue
 	 * @throws IOException 
 	 */
 	public void assertOutput(boolean generateErrorMessage, String expectedValue) throws IOException
@@ -294,7 +295,7 @@ public class VplConsoleSimulator
 	
 	/**
 	 * Fetches the full output and test the String with the condition with automatic assertion.
-	 * @param string
+	 * @param condition
 	 * @throws IOException 
 	 */
 	public void assertOutput(Predicate<String> condition) throws IOException
@@ -306,7 +307,8 @@ public class VplConsoleSimulator
 	/**
 	 * Fetches the full output and test the String with the condition with automatic assertion.
 	 * Generates an error message from getFullConsoleIO with errorMessage lambda expression.
-	 * @param string
+	 * @param condition
+	 * @param errorMessage
 	 * @throws IOException 
 	 */
 	public void assertOutput(Predicate<String> condition, Function<String, String> errorMessage) throws IOException
@@ -318,7 +320,7 @@ public class VplConsoleSimulator
 	
 	/**
 	 * Fetches the full output and test the String with the condition.
-	 * @param string
+	 * @param condition
 	 * @throws IOException 
 	 */
 	public boolean expectOutput(Predicate<String> condition) throws IOException
@@ -348,10 +350,8 @@ public class VplConsoleSimulator
 	
 	/**
 	 * Convenience function: Expects the Strings to be containing in the output.
-	 * @param string the content
-	 * @param boolean if true auto generates an error message 
-	 * containing the inputOutputDialog and the expected content
-	 * @throws IOException 
+	 * @param content the content
+	 * @throws IOException
 	 */
 	public boolean expectOutputContains(String ... content) throws IOException 
 	{
@@ -370,7 +370,7 @@ public class VplConsoleSimulator
 	
 	/**
 	 * Fetches the full output and expects the String to be at the end of the output.
-	 * @param string
+	 * @param condition
 	 * @throws IOException 
 	 */
 	public void expectError(Predicate<String> condition) throws IOException
@@ -425,8 +425,7 @@ public class VplConsoleSimulator
 
 	/**
 	 * Waits for the process to exit and returns the exit value
-	 * @param i
-	 * @throws InterruptedException 
+	 * @throws InterruptedException
 	 */
 	public Integer getExitValue() throws InterruptedException 
 	{
