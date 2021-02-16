@@ -84,7 +84,8 @@ public class VplJUnitTester extends org.junit.runner.notification.RunListener
         List<File> sourcefiles = findSourceFiles();
 	    if(stylechecks.isEmpty() == false && sourcefiles.isEmpty() == false)
 	    {
-	        if(CheckstyleRunner.getCheckstyleExecutable().exists() == true)
+	        if(CheckstyleRunner.getCheckstyleExecutable() != null &&
+					CheckstyleRunner.getCheckstyleExecutable().exists())
 	        {
         	    for(String check : stylechecks)
         	    {

@@ -78,7 +78,7 @@ public class CheckstyleRunner
     /**
      * Finds the executable checkstyle by traversing the path environment variable
      * 
-     * @return
+     * @return The File for the checkstyle executable or null if no checkstyle executable was found.
      */
     public static File getCheckstyleExecutable()
     {
