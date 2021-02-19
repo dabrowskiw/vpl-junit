@@ -126,6 +126,10 @@ public class VplJUnitTester extends org.junit.runner.notification.RunListener
 				if(VPLCommunicatorException.class.isAssignableFrom(t.getClass())) {
 					VPLCommunicatorException vpe = (VPLCommunicatorException)t;
 					System.out.println("Comment :=>> Evaluation failed -> " + vpe.getPoints() + "/" + vpe.getMaxPoints() + " Points.");
+					totalPoints += vpe.getPoints();
+					for(String comment : vpe.getComments()) {
+						System.out.println("Comment :=>> Comment: " + comment);
+					}
 				}
 				else {
 					System.out.println("Comment :=>> Evaluation failed -> 0 Points.");

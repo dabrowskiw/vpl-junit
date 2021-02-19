@@ -5,6 +5,7 @@ public class VPLCommunicatorException extends Throwable {
     private int maxPoints = 100;
     private boolean failed = false;
     private LinkedList<String> comments = new LinkedList<>();
+    private Throwable failureException = null;
 
     public void setPoints(int p) {
         // Make sure that points is always within [0, maxPoints]
