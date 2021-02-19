@@ -12,6 +12,7 @@
 	<property name="lib.dir" value="vendor"/>
 	<property name="jar.dir" value="release"/>
 	<property name="example.dir" value="examples"/>
+	<property name="failexample.dir" value="failexamples"/>
 	<property name="checkstyle.dir" value="checkstyle"/>
 	<property name="jar.file" value="${project-name}-${project-version}.jar"/>
 
@@ -84,7 +85,15 @@
 				<pathelement location="${jar.dir}/${jar.file}"/>
 			</classpath>
 		</javac>
-		
+
+		<!-- compile the error testcases into the bin directory-->
+		<javac debug="true" debuglevel="${debuglevel}" destdir="${bin.dir}" source="${source}" target="${target}" includeantruntime="false">
+			<src path="failexamples"/>
+			<classpath>
+				<pathelement location="${jar.dir}/${jar.file}"/>
+			</classpath>
+		</javac>
+
 		<!-- copy the checkstyle definitions into the bin dir-->
 		<copy todir="${bin.dir}">
 		  <fileset dir="${checkstyle.dir}">
@@ -99,7 +108,14 @@
 		  </fileset>
 		</copy>
 
-		<!-- copy the sources from the example dir to the bin dir -->
+		<!-- copy the examples from the failexample dir to the bin dir -->
+		<copy todir="${bin.dir}">
+			<fileset dir="${failexample.dir}">
+				<include name="**/*.java"/>
+			</fileset>
+		</copy>
+
+		<!-- copy the sources from the source dir to the bin dir -->
 		<copy todir="${bin.dir}">
 		  <fileset dir="${src.dir}">
 		    <include name="**/*.java"/>
@@ -110,5 +126,48 @@
 	    <java jar="${bin.dir}/${jar.file}" dir="${bin.dir}" fork="true" >
 	    </java>
 	</target>
+
+	<!-- Runs only the VPLCommunicator testcases with the newly generated library -->
+	<target name="runComm" depends="create_jar">
+
+		<!-- wipe old bin and copy the current jar to it -->
+		<delete dir="${bin.dir}"/>
+		<mkdir dir="${bin.dir}"/>
+		<copy file="${jar.dir}/${jar.file}" todir="${bin.dir}"/>
+
+		<!-- compile the testcases into the bin directory-->
+		<javac debug="true" debuglevel="${debuglevel}" destdir="${bin.dir}" source="${source}" target="${target}" includeantruntime="false">
+			<src path="examplesVPLCommunication"/>
+			<classpath>
+				<pathelement location="${jar.dir}/${jar.file}"/>
+			</classpath>
+		</javac>
+
+		<!-- copy the checkstyle definitions into the bin dir-->
+		<copy todir="${bin.dir}">
+			<fileset dir="${checkstyle.dir}">
+				<include name="**/checkstyle_*.xml"/>
+			</fileset>
+		</copy>
+
+		<!-- copy the examples from the example dir to the bin dir -->
+		<copy todir="${bin.dir}">
+			<fileset dir="examplesVPLCommunication">
+				<include name="**/*.java"/>
+			</fileset>
+		</copy>
+
+		<!-- copy the sources from the source dir to the bin dir -->
+		<copy todir="${bin.dir}">
+			<fileset dir="${src.dir}">
+				<include name="**/*.java"/>
+			</fileset>
+		</copy>
+
+		<!-- and run them -->
+		<java jar="${bin.dir}/${jar.file}" dir="${bin.dir}" fork="true" >
+		</java>
+	</target>
+
 
 </project>

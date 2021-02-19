@@ -3,13 +3,14 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 /**
  * Just a bunch of tests
  * @author gue
  *
  */
-public class SimpleVplTest 
+public class SimpleVplTest
 {
 
     @Test

@@ -24,10 +24,11 @@ import org.junit.runner.notification.Failure;
  */
 public class VplJUnitTester extends org.junit.runner.notification.RunListener
 {
+	public static int dirtyPoints;
 	Map<String, Throwable> points = new LinkedHashMap<>();
 	Map<String, List<StyleViolation>> deductions = new LinkedHashMap<>();
 
-	Pattern pointregex = Pattern.compile(".*_(\\d{1,})P.*");
+	static Pattern pointregex = Pattern.compile("(.*)_(\\d+)P.*");
 
 	/**
 	 * Runs All JUnit Testcases with the annotation {@see VplTestcase} of all given classes.
@@ -106,8 +107,9 @@ public class VplJUnitTester extends org.junit.runner.notification.RunListener
 	    {
 	    	Throwable t = st.points.get(functionname);
 	    	Integer points =  st.getPointsForFunctionName(functionname);
+			String prettyFunctionName = st.getBasenameForFunctionName(functionname);
 
-    		if(points == null) // Testcase without points
+    		if(points == 0) // Testcase without points
     		{
     			continue;
     		}
@@ -115,22 +117,34 @@ public class VplJUnitTester extends org.junit.runner.notification.RunListener
 	    	if(t == null) // No Exception -> Test has succeeded
 	    	{
 	    		totalPoints += points;
-	    		System.out.println("Comment :=>> " + functionname + " ... success -> " + points + " Points");
+				System.out.println("Comment :=>>- " + prettyFunctionName);
+				System.out.println("Comment :=>> Congratulations, evaluation successful -> " + points + " points.");
 	    	}
 	    	else
 	    	{
-	    		System.out.println("Comment :=>> " + functionname + " ... failed -> 0 Points because ...");
-    			System.out.println("<|--");
-    			System.out.println(">" + t.toString());
-    			System.out.println("--|>");
-    			
-    			if (t.getClass() != java.lang.AssertionError.class)
-    			{
-    				System.out.println("<|--");
-        			System.out.println("> at: " + t.getStackTrace()[0]);
-        			System.out.println("--|>");
-    			}
-	    	}
+				System.out.println("Comment :=>>- " + prettyFunctionName);
+				if(VPLCommunicatorException.class.isAssignableFrom(t.getClass())) {
+					VPLCommunicatorException vpe = (VPLCommunicatorException)t;
+					System.out.println("Comment :=>> Evaluation failed -> " + vpe.getPoints() + "/" + vpe.getMaxPoints() + " Points.");
+				}
+				else {
+					System.out.println("Comment :=>> Evaluation failed -> 0 Points.");
+					System.out.println("Comment :=>> Reason:");
+					System.out.println("<|--");
+					System.out.println(">" + t.toString());
+					System.out.println("--|>");
+
+					if (t.getClass() != java.lang.AssertionError.class)
+					{
+						System.out.println("Comment :=>> Full stack trace:");
+						System.out.println("<|--");
+						for(StackTraceElement elem : t.getStackTrace()) {
+							System.out.println("> " + elem);
+						}
+						System.out.println("--|>");
+					}
+				}
+			}
 	    }
 
 	    // STEP 5: Summary for checkstyle
@@ -299,16 +313,31 @@ public class VplJUnitTester extends org.junit.runner.notification.RunListener
 	 * @param functionName
 	 * @return
 	 */
-	public Integer getPointsForFunctionName(String functionName)
+	public static Integer getPointsForFunctionName(String functionName)
 	{
+		System.out.println("---" + functionName + "---");
 		Matcher m = pointregex.matcher(functionName);
 		if(m.matches())
 		{
-			String points = m.group(1);
+			String points = m.group(2);
 			return Integer.parseInt(points);
 		}
 
-		return null;
+		return 0;
+	}
+
+	/**
+	 * Returns the function name without the point description (_Pxx) at the end
+	 * @param functionName The name of the function to split
+	 * @return The function name without the _Pxx point description at the end.
+	 */
+	public static String getBasenameForFunctionName(String functionName) {
+		Matcher m = pointregex.matcher(functionName);
+		if(m.matches())
+		{
+			return m.group(1);
+		}
+		return functionName;
 	}
 
 	/**
@@ -318,7 +347,9 @@ public class VplJUnitTester extends org.junit.runner.notification.RunListener
 	public void testFinished(Description description) throws Exception
 	{
 		String fnName = description.getTestClass().getName() + "." + description.getMethodName();
-		this.points.putIfAbsent(fnName,  null);
+		System.out.println("----------------" + fnName);
+		this.points.putIfAbsent(fnName, null);
+//		this.points.putIfAbsent(fnName, null);
 	}
 
 	/**

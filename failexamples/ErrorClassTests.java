@@ -21,8 +21,9 @@ public class ErrorClassTests {
 		ErrorClass e = new ErrorClass();
 		assertTrue(e.produceNullPointerException());
 	}
-	
-	@Test
+
+	// Commented out, since things that do not compile in the first place cannot be tested
+/*	@Test
 	public void testWrongClassName_5P()
 	{
 		//intentionally wrong to see the error message
@@ -35,7 +36,7 @@ public class ErrorClassTests {
 		//intentionally wrong to see the error message
 		ErrorClass e = new ErrorClass();
 		e.func();
-	}
+	}*/
 	
 	@Test
 	public void testAssertionError_5P()
