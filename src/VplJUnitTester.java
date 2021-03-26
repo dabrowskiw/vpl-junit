@@ -125,10 +125,6 @@ public class VplJUnitTester extends org.junit.runner.notification.RunListener
 	    	{
 
 				System.out.println("Comment :=>>- " + prettyFunctionName);
-				//TODO: VPLCommunicationException.java does this contain an exception? If there is no exception everything is okay. If there is an excpetion: AssertionError: print toString(). If it is any other exception -> print stacktrace
-
-
-
 
 				if(VPLCommunicatorException.class.isAssignableFrom(t.getClass())) {
 					VPLCommunicatorException vpe = (VPLCommunicatorException)t;
@@ -150,7 +146,6 @@ public class VplJUnitTester extends org.junit.runner.notification.RunListener
 									System.out.println("--|>");
 							}
 						}
-						System.out.println( "----------------------------------------Exception: Custom");
 						for(String comment : vpe.getComments()) {
 							System.out.println("Comment :=>> Comment: " + comment);
 						}
@@ -161,14 +156,12 @@ public class VplJUnitTester extends org.junit.runner.notification.RunListener
 
 				}
 				else {
-					System.out.println( "----------------------------------------Exception: ?");
 					System.out.println("Comment :=>> Evaluation failed -> 0 Points.");
 					System.out.println("Comment :=>> Reason:");
 					System.out.println("<|--");
 					System.out.println(">" + t.toString());
 					System.out.println("--|>");
 
-					//TODO: Nullpointerexeption: print stacktrace; Assertion Error: print actual error
 					try{
 						if (t.getClass() != java.lang.AssertionError.class)
 						{

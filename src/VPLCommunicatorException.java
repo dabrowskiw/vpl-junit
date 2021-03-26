@@ -48,20 +48,7 @@ public class VPLCommunicatorException extends Throwable {
         return comments;
     }
 
-    public boolean vplAssertTrue(String message, int points, boolean result){
 
-        if(result) {
-            this.addPoints(points);
-//            System.out.println("--------------DEBUG: TRUE");
-
-        }else{
-            this.addComment(message);
-//            fail();
-//            System.out.println("--------------DEBUG: False; Message: " + message);
-        }
-
-        return result;
-    }
 
     public void setException(Throwable t){
         this.failureException = t;
@@ -71,17 +58,7 @@ public class VPLCommunicatorException extends Throwable {
         return this.failureException;
     }
 
-    public boolean vplAssertFalse(String message, int points, boolean result){
-        return vplAssertTrue(message, points, !result);
-    }
 
-    public void jUnitTestResult(){
-        if(this.points >= this.maxPoints){
-            assertTrue(true);
-        }else{
-            fail();
-        }
-    }
 
 //    public  boolean vplAssertEquals(String message, int points){
 //        return vplAssertTrue(message, points, result);
@@ -112,4 +89,60 @@ public class VPLCommunicatorException extends Throwable {
 ////        }
 ////
 ////    }
+
+    public boolean vplAssertTrue(String message, int points, boolean result){
+        if(result) {
+            this.addPoints(points);
+
+        }else{
+            this.addComment(message);
+        }
+        return result;
+    }
+
+    public boolean vplAssertTrue(int points, boolean result){
+        if(result) {
+            this.addPoints(points);
+
+        }
+
+        return result;
+    }
+
+    public boolean vplAssertFalse(String message, int points, boolean result){
+        return vplAssertTrue(message, points, !result);
+    }
+
+    public boolean vplAssertFalse(int points, boolean result){
+        return vplAssertTrue(points, !result);
+    }
+
+    public boolean vplAssertEquals(String message, int points, int... array){
+        if((array.length == 0) || (array.length == 1)){
+            return true;
+        }
+
+        int temp = array[0];
+
+        for(int i = 0; i < array.length; i++){
+            if(temp != array[i]) {
+                this.addComment(message);
+                return false;
+            }
+        }
+
+        this.addPoints(points);
+        return true;
+    }
+
+
+    public void jUnitTestResult(){
+        if(this.points >= this.maxPoints){
+            assertTrue(true);
+        }else{
+            fail();
+        }
+    }
+
+
 }
