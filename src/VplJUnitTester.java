@@ -116,37 +116,78 @@ public class VplJUnitTester extends org.junit.runner.notification.RunListener
     		
 	    	if(t == null) // No Exception -> Test has succeeded
 	    	{
+
 	    		totalPoints += points;
 				System.out.println("Comment :=>>- " + prettyFunctionName);
 				System.out.println("Comment :=>> Congratulations, evaluation successful -> " + points + " points.");
 	    	}
 	    	else
 	    	{
+
 				System.out.println("Comment :=>>- " + prettyFunctionName);
+				//TODO: VPLCommunicationException.java does this contain an exception? If there is no exception everything is okay. If there is an excpetion: AssertionError: print toString(). If it is any other exception -> print stacktrace
+
+
+
+
 				if(VPLCommunicatorException.class.isAssignableFrom(t.getClass())) {
 					VPLCommunicatorException vpe = (VPLCommunicatorException)t;
-					System.out.println("Comment :=>> Evaluation failed -> " + vpe.getPoints() + "/" + vpe.getMaxPoints() + " Points.");
-					totalPoints += vpe.getPoints();
-					for(String comment : vpe.getComments()) {
-						System.out.println("Comment :=>> Comment: " + comment);
+					if(vpe.getPoints() >= vpe.getMaxPoints()){
+						totalPoints += points;
+						System.out.println("Comment :=>>- " + prettyFunctionName);
+						System.out.println("Comment :=>> Congratulations, evaluation successful -> " + points + " points.");
+					}else{
+						System.out.println("Comment :=>> Evaluation failed -> " + vpe.getPoints() + "/" + vpe.getMaxPoints() + " Points.");
+						totalPoints += vpe.getPoints();
+
+						if(vpe.getException() != null){
+							if (vpe.getException().getClass() != java.lang.AssertionError.class){
+								System.out.println("Comment :=>> Full stack trace:");
+								System.out.println("<|--");
+								for(StackTraceElement elem : vpe.getException().getStackTrace()) {
+									System.out.println("> " + elem);
+								}
+									System.out.println("--|>");
+							}
+						}
+						System.out.println( "----------------------------------------Exception: Custom");
+						for(String comment : vpe.getComments()) {
+							System.out.println("Comment :=>> Comment: " + comment);
+						}
+
 					}
+
+
+
 				}
 				else {
+					System.out.println( "----------------------------------------Exception: ?");
 					System.out.println("Comment :=>> Evaluation failed -> 0 Points.");
 					System.out.println("Comment :=>> Reason:");
 					System.out.println("<|--");
 					System.out.println(">" + t.toString());
 					System.out.println("--|>");
 
-					if (t.getClass() != java.lang.AssertionError.class)
-					{
-						System.out.println("Comment :=>> Full stack trace:");
-						System.out.println("<|--");
-						for(StackTraceElement elem : t.getStackTrace()) {
-							System.out.println("> " + elem);
+					//TODO: Nullpointerexeption: print stacktrace; Assertion Error: print actual error
+					try{
+						if (t.getClass() != java.lang.AssertionError.class)
+						{
+							System.out.println("Comment :=>> Full stack trace:");
+							System.out.println("<|--");
+							for(StackTraceElement elem : t.getStackTrace()) {
+								System.out.println("> " + elem);
+							}
+							System.out.println("--|>");
 						}
-						System.out.println("--|>");
+					}catch(NullPointerException e)
+					{
+						e.printStackTrace();
+					}catch(AssertionError e){
+						e.printStackTrace();
 					}
+
+
+
 				}
 			}
 	    }

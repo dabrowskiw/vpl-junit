@@ -77,6 +77,12 @@ public class VPLMethodRoadie extends MethodRoadie {
 
     @Override
     protected void addFailure(Throwable e) {
-        notifier.fireTestFailure(new Failure(description, e));
+//        notifier.fireTestFailure(new Failure(description, e));
+
+        ((VPLCommunicator)test).getTestResult().setException(e);
+        notifier.fireTestFailure(new Failure(description, ((VPLCommunicator)test).getTestResult()));
+
+
+        //TODO: Dublicate line 44. 
     }
 }
