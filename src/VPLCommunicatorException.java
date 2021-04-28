@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.LinkedList;
 
 import org.junit.Assert;
@@ -60,9 +61,20 @@ public class VPLCommunicatorException extends Throwable {
 
 
 
-//    public  boolean vplAssertEquals(String message, int points){
-//        return vplAssertTrue(message, points, result);
-//    }
+    public boolean vplAssertEquals(String message, int points, Object... objects){
+
+        for(int i = 0; i < objects.length; i++){
+            for(int j = i; j < objects.length; j++){
+                if(!objects[i].equals(objects[j])){
+                    vplAssertTrue(message, points, false);
+                    return false;
+                }
+            }
+        }
+
+        return vplAssertTrue(message, points, true);
+    }
+
 
 //    public static void assertEquals(String message, String x, String y){
 //        try {
