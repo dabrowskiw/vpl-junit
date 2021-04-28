@@ -75,33 +75,6 @@ public class VPLCommunicatorException extends Throwable {
         return vplAssertTrue(message, points, true);
     }
 
-
-//    public static void assertEquals(String message, String x, String y){
-//        try {
-//            AssassertEquals(message, x);
-//        }catch (AssertionError ae){
-//            System.out.println("-=EQUALS TEST MESSAGE=-");
-//        }
-//    }
-
-//    public static void assertTrueX(String message, boolean x){
-//        System.out.println("============================================================assertTrueX");
-//        try {
-//            Assert.assertTrue(message, x);
-//        }catch (AssertionError ae){
-//            System.out.println("OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
-//        }
-//    }
-//
-////    public int getPointsFinal() {
-////        try{
-////            return points;
-////        }finally {
-////            assertTrue("Y", false);
-////        }
-////
-////    }
-
     public boolean vplAssertTrue(String message, int points, boolean result){
         if(result) {
             this.addPoints(points);
